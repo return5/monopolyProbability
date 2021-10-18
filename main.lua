@@ -15,6 +15,7 @@ local PLACE_MAP = {
 
 local SPOTS = {}
 
+local LIMIT = 10000000
 
 local function buildCards() 
     return {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16}
@@ -27,6 +28,15 @@ local function initSpots()
     SPOTS["Jail"] = 0
 end
 
+local function updateSpots()
+    if PLAYER_LOC == 41 then
+        SPOTS["Jail"] = SPOTS["Jail"] + 1
+        PLAYER_LOC = 11
+    else
+        SPOTS[PLACE_MAP[PLAYER_LOC]] = SPOTS[PLACE_MAP[PLAYER_LOC]]  + 1
+    end
+end
+
 local function advanceToNearestUtility()
     if PLAYER_LOC < 13 or PLAYER_LOC >= 29  then
         PLAYER_LOC = 13
@@ -36,7 +46,7 @@ local function advanceToNearestUtility()
     updateSpots()
 end
 
-local function advanceToNBearestRailRoad()
+local function advanceToNearestRailRoad()
     if PLAYER_LOC >= 36 and PLAYER_LOC < 6 then
         PLAYER_LOC = 6
     elseif PLAYER_LOC >= 6 and PLAYER_LOC < 16 then
@@ -47,15 +57,6 @@ local function advanceToNBearestRailRoad()
         PLAYER_LOC = 36
     end
     updateSpots()
-end
-
-local function updateSpots()
-    if PLAYER_LOC == 41 then
-        SPOTS["Jail"] = SPOTS["Jail"] + 1
-        PLAYER_LOC = 11
-    else
-        SPOTS[PLACE_MAP[PLAYER_LOC]] = SPOTS[PLACE_MAP[PLAYER_LOC]]  + 1
-    end
 end
 
 local function removeCard(deck,i,remove,isChance)
@@ -85,7 +86,7 @@ local function checkChance(i)
         PLAYER_LOC = 25
         updateSpots()
     elseif i == 4 then
-        advancedToNearestRailRoad()
+        advanceToNearestRailRoad()
     elseif i == 5 then
         advanceToNearestUtility()
     elseif i == 6 then
@@ -132,7 +133,7 @@ local function main()
     local prev1 = false
     local prev2 = false
     local prev3 = false
-    for i=1,1000000,1 do
+    for i=1,LIMIT,1 do
         prev3 = prev2
         prev2 = prev1
         local dice1 = math.random(1,6)
@@ -142,7 +143,7 @@ local function main()
             PLAYER_LOC = 41
             updateSpots()
         else
-            PLAYER_LOC = (PLAYER_LOC + dice1 + dice2) % #PLACE_MAP
+            PLAYER_LOC = ((PLAYER_LOC + dice1 + dice2) % #PLACE_MAP) + 1
             updateSpots()
             if PLACE_MAP[PLAYER_LOC] == "Chance" then
                 local j = math.random(#chance)
@@ -161,9 +162,10 @@ local function main()
 end
 
 local function printResults()
-    local file = io.open("results.txt","w")
+    local file = io.open("results.mp","w")
+    file:write("|Place  |Chance|\n:---|---:\n")
     for k,v in pairs(SPOTS) do
-        file:write(k," : ",v,"\n")
+        file:write("|",k," | ",(v / LIMIT) * 100,"|\n")
     end
     file:close()
 end
