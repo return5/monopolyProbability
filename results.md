@@ -1,39 +1,39 @@
 |Place  |Chance|
 :---|---:
-|Go To Jail | 2.55372|
-|North Carolina Avenue | 2.65722|
-|Short Line | 2.76208|
-|Virginia avenue | 2.38165|
-|GO | 3.13776|
-|Pacific Avenue | 2.60934|
-|Income Tax | 2.40356|
-|Reading RailRoad | 2.71652|
-|Pennsylvania Avenue | 2.53782|
-|Luxury Tax | 2.19631|
-|New York Avenue | 3.00674|
-|Free Parking | 2.82842|
-|Oriental Avenue | 2.29637|
-|Atlantic Avenue | 2.6735|
-|Chance | 7.50848|
-|Jail | 3.93147|
-|Tennesse Avenue | 2.90905|
-|BoardWalk | 2.643|
-|Marvin Gardens | 2.60775|
-|Just Visiting Jail | 2.34255|
-|Illinois Avenue | 3.12612|
-|Indiana Avenue | 2.70932|
-|Park Place | 2.30418|
-|St.Charles Place | 2.2892|
-|Vermont Avenue | 2.36454|
-|St.James Place | 3.05679|
-|B.&O. RailRoad | 2.99272|
-|Connecticut Avenue | 2.36302|
-|Community Chest | 7.71054|
-|States Avenue | 2.31549|
-|Kentuky Avenue | 2.79464|
-|Mediterranean Avenue | 2.20637|
-|Electric Company | 2.54049|
-|Baltic Avenu | 2.24805|
-|Water Works | 2.80978|
-|Ventnor Avenue | 2.66637|
-|Pennsylvania RailRoad | 2.71564|
+|Baltic Avenu | 2.2429|
+|Indiana Avenue | 2.71019|
+|States Avenue | 2.31714|
+|North Carolina Avenue | 2.65057|
+|Jail | 3.93268|
+|Pennsylvania RailRoad | 2.71852|
+|Pacific Avenue | 2.60552|
+|BoardWalk | 2.64222|
+|B.&O. RailRoad | 3.00325|
+|Ventnor Avenue | 2.67474|
+|Atlantic Avenue | 2.67442|
+|Connecticut Avenue | 2.36057|
+|GO | 3.13018|
+|Marvin Gardens | 2.60771|
+|Electric Company | 2.54384|
+|Free Parking | 2.83689|
+|Mediterranean Avenue | 2.20356|
+|Illinois Avenue | 3.12309|
+|Vermont Avenue | 2.36634|
+|Kentuky Avenue | 2.78635|
+|St.Charles Place | 2.28798|
+|Community Chest | 7.70701|
+|Luxury Tax | 2.18649|
+|Income Tax | 2.40717|
+|Park Place | 2.30477|
+|Chance | 7.51372|
+|Water Works | 2.80229|
+|Just Visiting Jail | 2.33454|
+|Go To Jail | 2.5565|
+|Pennsylvania Avenue | 2.54031|
+|Reading RailRoad | 2.72404|
+|St.James Place | 3.05677|
+|Virginia avenue | 2.37756|
+|New York Avenue | 3.00979|
+|Oriental Avenue | 2.29134|
+|Short Line | 2.77209|
+|Tennesse Avenue | 2.91886|

@@ -161,8 +161,9 @@ local function main()
    end
 end
 
+
 local function printResults()
-    local file = io.open("results.mp","w")
+    local file = io.open("results.md","w")
     file:write("|Place  |Chance|\n:---|---:\n")
     for k,v in pairs(SPOTS) do
         file:write("|",k," | ",(v / LIMIT) * 100,"|\n")
