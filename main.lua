@@ -27,6 +27,28 @@ local function initSpots()
     SPOTS["Jail"] = 0
 end
 
+local function advanceToNearestUtility()
+    if PLAYER_LOC < 13 or PLAYER_LOC >= 29  then
+        PLAYER_LOC = 13
+    else
+        PLAYER_LOC = 29
+    end
+    updateSpots()
+end
+
+local function advanceToNBearestRailRoad()
+    if PLAYER_LOC >= 36 and PLAYER_LOC < 6 then
+        PLAYER_LOC = 6
+    elseif PLAYER_LOC >= 6 and PLAYER_LOC < 16 then
+        PLAYER_LOC = 16
+    elseif PLAYER_LOC>= 16 and PLAYER_LOC < 26 then
+        PLAYER_LOC = 26
+    else
+        PLAYER_LOC = 36
+    end
+    updateSpots()
+end
+
 local function updateSpots()
     if PLAYER_LOC == 41 then
         SPOTS["Jail"] = SPOTS["Jail"] + 1
@@ -36,10 +58,14 @@ local function updateSpots()
     end
 end
 
-local function removeCard(deck,i,remove)
+local function removeCard(deck,i,remove,isChance)
     remove(deck,i)
     if #deck < 1 then
-        return buildCards()
+        local deck = buildCards()
+        if isChance then
+            deck[#deck + 1] = 4
+        end
+        return deck
     end
     return deck
 end
@@ -99,6 +125,7 @@ local function main()
     local community = buildCards()
     local chance = buildCards()
     local remove = table.remove
+    table.insert(chance,4)
     math.randomseed(os.time())
     initSpots()
     updateSpots()
@@ -112,19 +139,19 @@ local function main()
         local dice2 = math.random(1,6) 
         prev1 = dice1 == dice2
         if prev1 and prev2 and prev3  then
-            PLAYER_LOC = 11
+            PLAYER_LOC = 41
             updateSpots()
         else
             PLAYER_LOC = (PLAYER_LOC + dice1 + dice2) % #PLACE_MAP
             updateSpots()
             if PLACE_MAP[PLAYER_LOC] == "Chance" then
                 local j = math.random(#chance)
-                checkChance(j)
-                chance = removeCard(chance,j,remove)
+                checkChance(chance[j])
+                chance = removeCard(chance,j,remove,true)
             elseif PLACE_MAP[PLAYER_LOC] == "Community Chest" then
                 local j = math.random(#community)
-                checkCommunity(j)
-                community = removeCard(community,j,remove)
+                checkCommunity(community[j])
+                community = removeCard(community,j,remove,false)
             elseif PLACE_MAP[PLAYER_LOC] == "Go To Jail" then
                 PLAYER_LOC = 41
                 updateSpots()
