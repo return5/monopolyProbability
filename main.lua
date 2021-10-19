@@ -17,6 +17,7 @@ local SPOTS = {}
 
 local LIMIT = 10000000
 
+--16 diffrent cards for chance and community chest.
 local function buildCards() 
     return {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16}
 end
@@ -51,7 +52,7 @@ local function advanceToNearestRailRoad()
         PLAYER_LOC = 6
     elseif PLAYER_LOC >= 6 and PLAYER_LOC < 16 then
         PLAYER_LOC = 16
-    elseif PLAYER_LOC>= 16 and PLAYER_LOC < 26 then
+    elseif PLAYER_LOC >= 16 and PLAYER_LOC < 26 then
         PLAYER_LOC = 26
     else
         PLAYER_LOC = 36
@@ -64,6 +65,7 @@ local function removeCard(deck,i,remove,isChance)
     if #deck < 1 then
         local deck = buildCards()
         if isChance then
+            --chance has 2 advanceToNearestRailRaod cards.
             deck[#deck + 1] = 4
         end
         return deck
@@ -126,31 +128,34 @@ local function main()
     local community = buildCards()
     local chance = buildCards()
     local remove = table.remove
+    local rand   = math.random
     table.insert(chance,4)
     math.randomseed(os.time())
     initSpots()
     updateSpots()
+    -- booleans to record the last 3 dice rolls are doubles.
     local prev1 = false
     local prev2 = false
     local prev3 = false
     for i=1,LIMIT,1 do
         prev3 = prev2
         prev2 = prev1
-        local dice1 = math.random(1,6)
-        local dice2 = math.random(1,6) 
+        local dice1 = rand(1,6)
+        local dice2 = rand(1,6) 
         prev1 = dice1 == dice2
+    -- if all three are doubles then it's off to jail.
         if prev1 and prev2 and prev3  then
             PLAYER_LOC = 41
             updateSpots()
         else
-            PLAYER_LOC = ((PLAYER_LOC + dice1 + dice2) % #PLACE_MAP) + 1
+            PLAYER_LOC = ((PLAYER_LOC + dice1 + dice2) % 40) + 1
             updateSpots()
             if PLACE_MAP[PLAYER_LOC] == "Chance" then
-                local j = math.random(#chance)
+                local j = rand(#chance)
                 checkChance(chance[j])
                 chance = removeCard(chance,j,remove,true)
             elseif PLACE_MAP[PLAYER_LOC] == "Community Chest" then
-                local j = math.random(#community)
+                local j = rand(#community)
                 checkCommunity(community[j])
                 community = removeCard(community,j,remove,false)
             elseif PLACE_MAP[PLAYER_LOC] == "Go To Jail" then
@@ -162,11 +167,29 @@ local function main()
 end
 
 
+local function sortResults()
+    local sorted = {}
+    for k,_ in pairs(SPOTS) do
+        local temp = k
+        for i=1,#sorted,1 do
+            if SPOTS[temp] > SPOTS[sorted[i]] then
+                local temp2 = sorted[i]
+                sorted[i] = temp
+                temp = temp2
+            end
+        end
+        sorted[#sorted + 1] = temp
+    end
+    return sorted
+end
+
+
 local function printResults()
     local file = io.open("results.md","w")
     file:write("|Place  |Chance|\n:---|---:\n")
-    for k,v in pairs(SPOTS) do
-        file:write("|",k," | ",(v / LIMIT) * 100,"|\n")
+    local sorted = sortResults()
+    for i=1, #sorted,1 do
+        file:write("|",sorted[i]," | ",(SPOTS[sorted[i]] / LIMIT) * 100,"|\n")
     end
     file:close()
 end
