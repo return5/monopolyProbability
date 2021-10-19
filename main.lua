@@ -2,6 +2,7 @@
 
 local PLAYER_LOC = 1
 
+--every board location in monopoly in order from GO and moving clockwise around the board.
 local PLACE_MAP = {
     "GO","Mediterranean Avenue","Community Chest","Baltic Avenu", "Income Tax",
     "Reading RailRoad","Oriental Avenue","Chance","Vermont Avenue","Connecticut Avenue",
@@ -13,8 +14,10 @@ local PLACE_MAP = {
     "Park Place","Luxury Tax", "BoardWalk"
 }
 
+--map which holds the locatons and the count of how many times player lands on that place.
 local SPOTS = {}
 
+--number of times to roll the dice.
 local LIMIT = 10000000
 
 --16 diffrent cards for chance and community chest.
@@ -22,6 +25,7 @@ local function buildCards()
     return {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16}
 end
 
+--initalize the SPOTS map with 0 for each place.
 local function initSpots() 
     for i=1,#PLACE_MAP,1 do
         SPOTS[PLACE_MAP[i]] = 0
@@ -29,7 +33,9 @@ local function initSpots()
     SPOTS["Jail"] = 0
 end
 
+--when player lands on a spot increment the count by one.
 local function updateSpots()
+    --if player in in jail(not just visiting).
     if PLAYER_LOC == 41 then
         SPOTS["Jail"] = SPOTS["Jail"] + 1
         PLAYER_LOC = 11
@@ -38,6 +44,7 @@ local function updateSpots()
     end
 end
 
+--based on ucrrent location, move to nearest utility.
 local function advanceToNearestUtility()
     if PLAYER_LOC < 13 or PLAYER_LOC >= 29  then
         PLAYER_LOC = 13
@@ -47,6 +54,7 @@ local function advanceToNearestUtility()
     updateSpots()
 end
 
+--based on current location, move to nearest railroad.
 local function advanceToNearestRailRoad()
     if PLAYER_LOC >= 36 and PLAYER_LOC < 6 then
         PLAYER_LOC = 6
@@ -60,9 +68,12 @@ local function advanceToNearestRailRoad()
     updateSpots()
 end
 
+--when player draws a card from community chest or chance remove that card from the deck.
 local function removeCard(deck,i,remove,isChance)
     remove(deck,i)
+    --if deck is empty.
     if #deck < 1 then
+        --build new deck
         local deck = buildCards()
         if isChance then
             --chance has 2 advanceToNearestRailRaod cards.
@@ -74,6 +85,7 @@ local function removeCard(deck,i,remove,isChance)
 end
 
 
+--check out which chance card was drawn.
 local function checkChance(i)
     if i == 1 then
         --BoardWalk
@@ -111,6 +123,7 @@ local function checkChance(i)
 
 end
 
+--checkout which community chest card was drawn.
 local function checkCommunity(i)
     if i == 1 then
         --go to jail
@@ -133,7 +146,7 @@ local function main()
     math.randomseed(os.time())
     initSpots()
     updateSpots()
-    -- booleans to record the last 3 dice rolls are doubles.
+    -- booleans to record if the last 3 dice rolls are doubles.
     local prev1 = false
     local prev2 = false
     local prev3 = false
@@ -148,6 +161,7 @@ local function main()
             PLAYER_LOC = 41
             updateSpots()
         else
+            --player location is modulo with teh number of places. adding 1 to account for human readable based indexing.
             PLAYER_LOC = ((PLAYER_LOC + dice1 + dice2) % 40) + 1
             updateSpots()
             if PLACE_MAP[PLAYER_LOC] == "Chance" then
@@ -167,7 +181,9 @@ local function main()
 end
 
 
+--sort results from most to least chance.
 local function sortResults()
+    --holds sorted keys from most chance to least chance.
     local sorted = {}
     for k,_ in pairs(SPOTS) do
         local temp = k
@@ -178,6 +194,7 @@ local function sortResults()
                 temp = temp2
             end
         end
+        --after the above loop temp will be the current lowest chance place. as such it belongs int eh back of the list.
         sorted[#sorted + 1] = temp
     end
     return sorted
