@@ -1,10 +1,3 @@
-# monopolyProbability
-Simulates a single piece game of Monopoly and then gives the probability of landing on each place.
-
-Simulation of a single piece moving around the Monopoly board. Records each place it lands on. 
-At the end of the game it sorts then prints the results into a markdown table.
-
-### results  
 |Place  |Chance|
 :---|---:
 |Community Chest | 7.71126|
@@ -44,4 +37,3 @@ At the end of the game it sorts then prints the results into a markdown table.
 |Baltic Avenu | 2.25547|
 |Mediterranean Avenue | 2.20906|
 |Luxury Tax | 2.19668|
-
